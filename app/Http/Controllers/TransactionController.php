@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\TransactionsResource;
 use App\Http\Services\BaseApi;
-use App\Models\Employee;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {

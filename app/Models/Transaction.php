@@ -12,19 +12,20 @@ class Transaction extends Model
     protected $table = 'transactions';
 
     protected $fillable = [
+        'id',
         'employee_id',
-        'status_id',
+        'status_transaction_id',
         'hours',
         'created_at'
     ];
 
     public function status()
     {
-        return $this->belongsTo(StatusTransaction::class);
+        return $this->belongsTo(StatusTransaction::class, 'status_transaction_id', 'id');
     }
 
     public function employee()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class, 'employee_id', 'id');
     }
 }

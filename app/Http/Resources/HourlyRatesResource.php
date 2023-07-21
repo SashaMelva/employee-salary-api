@@ -16,9 +16,8 @@ class HourlyRatesResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'price'=> $this->resource->title,
-            'employee_id'=> $this->resource->description,
-            'employee'=> EmployeesResource::collection($this->resource->employee)
+            'employee_id'=> $this->resource->employee_id,
+            'price'=> $this->resource->price,
         ];
     }
 }

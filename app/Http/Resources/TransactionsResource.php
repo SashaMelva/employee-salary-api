@@ -17,10 +17,8 @@ class TransactionsResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'employee_id'=> $this->resource->employee_id,
-            'employee'=> EmployeesResource::collection($this->resource->employee),
             'hours' => $this->resource->hours,
-            'price' => $this->resource->price,
-            'status' => StatusTransactionsResource::collection($this->resource->status)
+            'status' => new StatusTransactionsResource($this->resource->status)
         ];
     }
 }
