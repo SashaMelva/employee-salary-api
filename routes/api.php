@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HourlyRateController;
 use App\Http\Controllers\StatusTransactionController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
@@ -33,4 +34,6 @@ Route::resource('/statusTransaction', StatusTransactionController::class)->excep
     'create', 'edit'
 ]);
 
-Route::get('/employee/all', [EmployeeController::class, 'allData']);
+Route::resource('/hourlyRate', HourlyRateController::class)->except([
+    'create', 'edit'
+]);

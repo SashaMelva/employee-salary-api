@@ -6,7 +6,6 @@ use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeesResource;
 use App\Http\Services\BaseApi;
 use App\Models\Employee;
-use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
 {
@@ -42,7 +41,7 @@ class EmployeeController extends Controller
         $employee = Employee::find($id);
 
         if (is_null($employee)) {
-            return (new BaseApi())->sendError('Product not found.');
+            return (new BaseApi())->sendError('Employee not found.');
         }
 
         return (new BaseApi())->sendResponse($employee->toArray());

@@ -42,7 +42,7 @@ class StatusTransactionController extends Controller
         $status = StatusTransaction::find($id);
 
         if (is_null($status)) {
-            return (new BaseApi())->sendError('Product not found.');
+            return (new BaseApi())->sendError('Status transaction not found.');
         }
 
         return (new BaseApi())->sendResponse($status->toArray());
@@ -59,9 +59,8 @@ class StatusTransactionController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $statusTransaction->employee_id = $validator['email'];
-        $statusTransaction->hours = $validator['password'];
-        $statusTransaction->id_status = $validator['id_status'];
+        $statusTransaction->title = $validator['title'];
+        $statusTransaction->description = $validator['description'];
         $statusTransaction->save();
         return (new BaseApi())->sendResponse($statusTransaction->toArray());
     }
@@ -71,7 +70,7 @@ class StatusTransactionController extends Controller
      */
     public function destroy( StatusTransaction $statusTransaction)
     {
-        $employee = StatusTransaction::find($statusTransaction);
-        return (new BaseApi())->sendResponse($employee->toArray());
+        $statusTransactionDelete = StatusTransaction::find($statusTransaction);
+        return (new BaseApi())->sendResponse($statusTransactionDelete->toArray());
     }
 }

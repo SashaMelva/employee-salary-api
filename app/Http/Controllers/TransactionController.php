@@ -32,7 +32,7 @@ class TransactionController extends Controller
             return (new BaseApi())->sendError('Validation Error.', $validator->errors());
         }
 
-        $validator->id_status = 1;
+        $validator->id_status = 3;
         $transaction = Transaction::create($validator);
         return (new BaseApi())->sendResponse($transaction->toArray());
     }
@@ -42,10 +42,10 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        $transaction = Employee::find($id);
+        $transaction = Transaction::find($id);
 
         if (is_null($transaction)) {
-            return (new BaseApi())->sendError('Product not found.');
+            return (new BaseApi())->sendError('Transaction not found.');
         }
 
         return (new BaseApi())->sendResponse($transaction->toArray());
@@ -62,8 +62,8 @@ class TransactionController extends Controller
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $transaction->employee_id = $validator['email'];
-        $transaction->hours = $validator['password'];
+        $transaction->employee_id = $validator['employee_id'];
+        $transaction->hours = $validator['hours'];
         $transaction->id_status = $validator['id_status'];
         $transaction->save();
         return (new BaseApi())->sendResponse($transaction->toArray());
@@ -74,7 +74,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        $employee = Employee::find($transaction);
-        return (new BaseApi())->sendResponse($employee->toArray());
+        $transactionDelete = Transaction::find($transaction);
+        return (new BaseApi())->sendResponse($transactionDelete->toArray());
     }
 }

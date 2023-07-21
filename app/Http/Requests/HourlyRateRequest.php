@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TransactionRequest extends FormRequest
+class HourlyRateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class TransactionRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'hours' => 'required|date_format:H:i',
+            'price' => 'min:1|max:255|float',
             'employee_id' => 'required|integer'
         ];
 
