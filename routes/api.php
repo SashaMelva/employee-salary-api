@@ -32,3 +32,5 @@ Route::resource('/transaction', TransactionController::class)->except([
 Route::resource('/statusTransaction', StatusTransactionController::class)->except([
     'create', 'edit'
 ]);
+
+Route::get('/employee/all', [EmployeeController::class, 'allData']);
