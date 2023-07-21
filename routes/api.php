@@ -6,6 +6,7 @@ use App\Http\Controllers\StatusTransactionController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,5 @@ Route::resource('/statusTransaction', StatusTransactionController::class)->excep
 Route::resource('/hourlyRate', HourlyRateController::class)->except([
     'create', 'edit'
 ]);
+
+URL::forceScheme('https');
