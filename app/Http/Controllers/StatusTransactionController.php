@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StatusTransactionsResource;
+use App\Http\Services\BaseApi;
 use App\Models\StatusTransaction;
 use Illuminate\Http\Request;
 
@@ -12,15 +14,8 @@ class StatusTransactionController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $status = StatusTransaction::all();
+        return (new BaseApi())->sendResponse(StatusTransactionsResource::collection($status))->getData();
     }
 
     /**
@@ -28,23 +23,29 @@ class StatusTransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = $request->validated();
+
+        if($validator->fails()){
+            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
+        }
+
+        $validator->id_status = 3;
+        $transaction = StatusTransaction::create($validator);
+        return (new BaseApi())->sendResponse($transaction->toArray());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(StatusTransaction $statusTransaction)
+    public function show($id)
     {
-        //
-    }
+        $status = StatusTransaction::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(StatusTransaction $statusTransaction)
-    {
-        //
+        if (is_null($status)) {
+            return (new BaseApi())->sendError('Product not found.');
+        }
+
+        return (new BaseApi())->sendResponse($status->toArray());
     }
 
     /**
@@ -52,14 +53,25 @@ class StatusTransactionController extends Controller
      */
     public function update(Request $request, StatusTransaction $statusTransaction)
     {
-        //
+        $validator = $request->validated();
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $statusTransaction->employee_id = $validator['email'];
+        $statusTransaction->hours = $validator['password'];
+        $statusTransaction->id_status = $validator['id_status'];
+        $statusTransaction->save();
+        return (new BaseApi())->sendResponse($statusTransaction->toArray());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(StatusTransaction $statusTransaction)
+    public function destroy( StatusTransaction $statusTransaction)
     {
-        //
+        $employee = StatusTransaction::find($statusTransaction);
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 }

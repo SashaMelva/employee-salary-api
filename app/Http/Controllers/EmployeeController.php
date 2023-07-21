@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeesResource;
 use App\Http\Services\BaseApi;
 use App\Models\Employee;
@@ -19,44 +20,49 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(EmployeeRequest $request)
     {
-        $validated = $request->validated();
-        Employee::created($validated);
+        $validator = $request->validated();
+
+        if ($validator->fails()) {
+            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
+        }
+
+        $employee = Employee::create($validator);
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Employee $employee)
+    public function show($id)
     {
-        //
-    }
+        $employee = Employee::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Employee $employee)
-    {
-        //
+        if (is_null($employee)) {
+            return (new BaseApi())->sendError('Product not found.');
+        }
+
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(EmployeeRequest $request, Employee $employee)
     {
-        //
+        $validator = $request->validated();
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $employee->email = $validator['email'];
+        $employee->password = $validator['password'];
+        $employee->save();
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 
     /**
@@ -65,6 +71,6 @@ class EmployeeController extends Controller
     public function destroy(Employee $employee)
     {
         $employee = Employee::find($employee);
-        $employee->delete();
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 }

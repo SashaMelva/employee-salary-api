@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TransactionRequest;
+use App\Http\Resources\TransactionsResource;
+use App\Http\Services\BaseApi;
+use App\Models\Employee;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -12,47 +16,57 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transactions = Transaction::all();
+        return (new BaseApi())->sendResponse(TransactionsResource::collection($transactions))->getData();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TransactionRequest $request)
     {
-        //
+        $validator = $request->validated();
+
+        if($validator->fails()){
+            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
+        }
+
+        $validator->id_status = 1;
+        $transaction = Transaction::create($validator);
+        return (new BaseApi())->sendResponse($transaction->toArray());
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Transaction $transaction)
+    public function show($id)
     {
-        //
-    }
+        $transaction = Employee::find($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Transaction $transaction)
-    {
-        //
+        if (is_null($transaction)) {
+            return (new BaseApi())->sendError('Product not found.');
+        }
+
+        return (new BaseApi())->sendResponse($transaction->toArray());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(TransactionRequest $request, Transaction $transaction)
     {
-        //
+        $validator = $request->validated();
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $transaction->employee_id = $validator['email'];
+        $transaction->hours = $validator['password'];
+        $transaction->id_status = $validator['id_status'];
+        $transaction->save();
+        return (new BaseApi())->sendResponse($transaction->toArray());
     }
 
     /**
@@ -60,6 +74,7 @@ class TransactionController extends Controller
      */
     public function destroy(Transaction $transaction)
     {
-        //
+        $employee = Employee::find($transaction);
+        return (new BaseApi())->sendResponse($employee->toArray());
     }
 }

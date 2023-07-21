@@ -19,6 +19,6 @@ class StatusTransaction extends Model
 
     public function transactions()
     {
-        return $this->hasMany(Transactions::class);
+        return $this->hasMany(Transaction::class);
     }
 }
