@@ -25,10 +25,6 @@ class StatusTransactionController extends Controller
     {
         $validator = $request->validated();
 
-        if($validator->fails()){
-            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
-        }
-
         $validator->id_status = 3;
         $transaction = StatusTransaction::create($validator);
         return (new BaseApi())->sendResponse($transaction->toArray());
@@ -54,10 +50,6 @@ class StatusTransactionController extends Controller
     public function update(Request $request, StatusTransaction $statusTransaction)
     {
         $validator = $request->validated();
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
 
         $statusTransaction->title = $validator['title'];
         $statusTransaction->description = $validator['description'];

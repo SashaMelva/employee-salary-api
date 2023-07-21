@@ -26,10 +26,6 @@ class HourlyRateController extends Controller
     {
         $validator = $request->validated();
 
-        if($validator->fails()){
-            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
-        }
-
         $validator->employee_id = $validator['employee_id'];
         $validator->price = $validator['price'];
         $hourlyRate = HourlyRate::create($validator);
@@ -56,10 +52,6 @@ class HourlyRateController extends Controller
     public function update(HourlyRateRequest $request, HourlyRate $hourlyRate)
     {
         $validator = $request->validated();
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
 
         $hourlyRate->employee_id = $validator['email'];
         $hourlyRate->hours = $validator['password'];

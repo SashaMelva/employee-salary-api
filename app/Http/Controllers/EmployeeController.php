@@ -6,6 +6,7 @@ use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeesResource;
 use App\Http\Services\BaseApi;
 use App\Models\Employee;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -25,11 +26,10 @@ class EmployeeController extends Controller
     {
         $validator = $request->validated();
 
-        if ($validator->fails()) {
-            return (new BaseApi())->sendError('Validation Error.', $validator->errors());
-        }
-
-        $employee = Employee::create($validator);
+        $employee = Employee::create([
+            'email' => $validator['email'],
+            'password' => Hash::make($validator['password'])
+        ]);
         return (new BaseApi())->sendResponse($employee->toArray());
     }
 
@@ -53,10 +53,6 @@ class EmployeeController extends Controller
     public function update(EmployeeRequest $request, Employee $employee)
     {
         $validator = $request->validated();
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
 
         $employee->email = $validator['email'];
         $employee->password = $validator['password'];
