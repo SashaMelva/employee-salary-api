@@ -18,7 +18,6 @@ return new class extends Migration
             $table->time('hours');
             $table->float('price');
             $table->timestamps();
-            $table->timestamps();
         });
     }
 
