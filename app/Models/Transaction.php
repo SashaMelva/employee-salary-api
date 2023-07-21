@@ -15,7 +15,6 @@ class Transaction extends Model
         'employee_id',
         'status_id',
         'hours',
-        'price',
         'created_at'
     ];
 
@@ -23,6 +22,7 @@ class Transaction extends Model
     {
         return $this->belongsTo(StatusTransaction::class);
     }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class);

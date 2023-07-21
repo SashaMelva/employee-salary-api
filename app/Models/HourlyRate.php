@@ -17,8 +17,8 @@ class HourlyRate extends Model
         'price'
     ];
 
-    public function transactions()
+    public function employee()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->belongsTo(Employee::class);
     }
 }

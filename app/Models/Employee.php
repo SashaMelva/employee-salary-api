@@ -21,4 +21,9 @@ class Employee extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    public function hourlyRates()
+    {
+        return $this->hasMany(HourlyRate::class);
+    }
 }
