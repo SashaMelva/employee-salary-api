@@ -23,7 +23,8 @@ class TransactionRequest extends FormRequest
     {
         $rules = [
             'hours' => 'required|date_format:H:i',
-            'employee_id' => 'required|integer'
+            'employee_id' => 'required|integer',
+            'status_transaction_id' => 'required|integer',
         ];
 
         switch ($this->getMethod()) {
@@ -31,12 +32,12 @@ class TransactionRequest extends FormRequest
                 return $rules;
             case 'PUT':
                 return [
-                    'id' => 'required|integer|exists:transactions,id',
+                    'id' => 'required|integer',
                     $rules
                 ];
             case 'DELETE':
                 return [
-                    'id' => 'required|integer|exists:transactions,id'
+                    'id' => 'required|integer'
                 ];
         }
     }

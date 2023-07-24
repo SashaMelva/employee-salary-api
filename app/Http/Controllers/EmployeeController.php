@@ -30,7 +30,7 @@ class EmployeeController extends Controller
             'email' => $validator['email'],
             'password' => Hash::make($validator['password'])
         ]);
-        return (new BaseApi())->sendResponse($employee->toArray());
+        return (new BaseApi())->sendResponse(new EmployeesResource($employee));
     }
 
     /**
@@ -50,12 +50,12 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(EmployeeRequest $request, Employee $employee)
+    public function update(EmployeeRequest $request, string $id)
     {
         $validator = $request->validated();
 
-        $employee->email = $validator['email'];
-        $employee->password = $validator['password'];
+        $employee = Employee::findOrFail($id);
+        $employee->fill($validator->except(['id']));
         $employee->save();
         return (new BaseApi())->sendResponse($employee->toArray());
     }

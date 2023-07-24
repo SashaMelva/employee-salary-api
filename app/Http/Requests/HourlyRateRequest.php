@@ -22,8 +22,8 @@ class HourlyRateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'price' => 'min:1|max:255|float',
-            'employee_id' => 'required|integer'
+            'price' => 'min:1|max:255',
+            'employee_id' => 'integer'
         ];
 
         switch ($this->getMethod()) {

@@ -26,8 +26,6 @@ class HourlyRateController extends Controller
     {
         $validator = $request->validated();
 
-        $validator->employee_id = $validator['employee_id'];
-        $validator->price = $validator['price'];
         $hourlyRate = HourlyRate::create($validator);
         return (new BaseApi())->sendResponse($hourlyRate->toArray());
     }
@@ -49,13 +47,12 @@ class HourlyRateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(HourlyRateRequest $request, HourlyRate $hourlyRate)
+    public function update(HourlyRateRequest $request, string $id)
     {
         $validator = $request->validated();
 
-        $hourlyRate->employee_id = $validator['email'];
-        $hourlyRate->hours = $validator['password'];
-        $hourlyRate->id_status = $validator['id_status'];
+        $hourlyRate = HourlyRate::findOrFail($id);
+        $hourlyRate->fill($validator->except(['id']));
         $hourlyRate->save();
         return (new BaseApi())->sendResponse($hourlyRate->toArray());
     }

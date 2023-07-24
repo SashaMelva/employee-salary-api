@@ -26,7 +26,6 @@ class TransactionController extends Controller
     {
         $validator = $request->validated();
 
-        $validator->id_status = 3;
         $transaction = Transaction::create($validator);
         return (new BaseApi())->sendResponse($transaction->toArray());
     }
@@ -48,13 +47,12 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TransactionRequest $request, Transaction $transaction)
+    public function update(TransactionRequest $request, string $id)
     {
         $validator = $request->validated();
 
-        $transaction->employee_id = $validator['employee_id'];
-        $transaction->hours = $validator['hours'];
-        $transaction->id_status = $validator['id_status'];
+        $transaction = Transaction::findOrFail($id);
+        $transaction->fill($validator->except(['id']));
         $transaction->save();
         return (new BaseApi())->sendResponse($transaction->toArray());
     }
